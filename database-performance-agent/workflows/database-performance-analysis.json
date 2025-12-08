@@ -1,0 +1,62 @@
+{
+  "name": "database-performance-analysis",
+  "description": "Comprehensive database performance monitoring and optimization workflow",
+  "schedule": {
+    "cron": "0 1 * * *",
+    "timezone": "UTC"
+  },
+  "steps": [
+    {
+      "name": "analyze_postgresql_performance",
+      "type": "data_query",
+      "datasource": "postgresql",
+      "query": "Analyze PostgreSQL performance metrics, slow queries, and index usage"
+    },
+    {
+      "name": "analyze_mysql_performance",
+      "type": "data_query",
+      "datasource": "mysql",
+      "query": "Analyze MySQL performance metrics, slow queries, and table optimization"
+    },
+    {
+      "name": "identify_slow_queries",
+      "type": "analysis",
+      "input": ["analyze_postgresql_performance", "analyze_mysql_performance"],
+      "criteria": {
+        "query_time_threshold": "1s",
+        "execution_count_threshold": 100,
+        "analysis_window": "24h"
+      }
+    },
+    {
+      "name": "assess_index_effectiveness",
+      "type": "analysis",
+      "input": ["analyze_postgresql_performance", "analyze_mysql_performance"],
+      "criteria": {
+        "unused_index_threshold": "7d",
+        "table_scan_ratio_threshold": 0.8
+      }
+    },
+    {
+      "name": "calculate_performance_recommendations",
+      "type": "analysis",
+      "input": ["identify_slow_queries", "assess_index_effectiveness"],
+      "criteria": {
+        "performance_impact_threshold": "moderate",
+        "implementation_complexity": "low_to_medium"
+      }
+    },
+    {
+      "name": "generate_performance_report",
+      "type": "report_generation",
+      "template": "database_performance_summary",
+      "input": ["calculate_performance_recommendations"]
+    },
+    {
+      "name": "send_slack_alert",
+      "type": "notification",
+      "datasource": "slack",
+      "input": ["generate_performance_report"]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Azure Monitor",
+  "type": "azure_monitor",
+  "connection": {
+    "tenant_id": "${AZURE_TENANT_ID}",
+    "client_id": "${AZURE_CLIENT_ID}",
+    "client_secret": "${AZURE_CLIENT_SECRET}",
+    "subscription_id": "${AZURE_SUBSCRIPTION_ID}"
+  },
+  "configuration": {
+    "metrics": ["CPU Percentage", "Memory Percentage", "Disk Read Bytes/sec", "Network In", "Network Out"],
+    "time_grain": "PT1M",
+    "resource_types": ["Microsoft.Compute/virtualMachines", "Microsoft.Sql/servers/databases", "Microsoft.Storage/storageAccounts"]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "aws-cost-optimization-report",
+  "description": "Daily AWS cost optimization and underutilization analysis workflow",
+  "schedule": {
+    "cron": "0 0 * * *",
+    "timezone": "UTC"
+  },
+  "steps": [
+    {
+      "name": "fetch_cost_data",
+      "type": "data_query",
+      "datasource": "aws_cost_explorer",
+      "query": "Get daily costs by service for the last 30 days"
+    },
+    {
+      "name": "analyze_ec2_utilization",
+      "type": "data_query",
+      "datasource": "aws_cloudwatch",
+      "query": "Get EC2 CPU and memory utilization metrics"
+    },
+    {
+      "name": "analyze_rds_utilization",
+      "type": "data_query",
+      "datasource": "aws_cloudwatch",
+      "query": "Get RDS CPU, connections, and IOPS utilization"
+    },
+    {
+      "name": "identify_underutilized_resources",
+      "type": "analysis",
+      "input": ["fetch_cost_data", "analyze_ec2_utilization", "analyze_rds_utilization"],
+      "criteria": {
+        "ec2_cpu_threshold": 20,
+        "rds_cpu_threshold": 30,
+        "minimum_cost_threshold": 10
+      }
+    },
+    {
+      "name": "generate_report",
+      "type": "report_generation",
+      "template": "cost_optimization_summary",
+      "input": ["identify_underutilized_resources"]
+    },
+    {
+      "name": "send_notification",
+      "type": "notification",
+      "datasource": "slack",
+      "input": ["generate_report"]
+    }
+  ]
+}

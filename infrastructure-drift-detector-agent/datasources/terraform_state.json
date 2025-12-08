@@ -1,0 +1,15 @@
+{
+  "type": "terraform-state",
+  "config": {
+    "backend_type": "s3",
+    "state_files": [
+      "s3://terraform-state-bucket/prod/terraform.tfstate",
+      "s3://terraform-state-bucket/dev/terraform.tfstate"
+    ],
+    "workspace_mappings": {
+      "production": "prod",
+      "development": "dev"
+    }
+  },
+  "shared_secrets": true
+}

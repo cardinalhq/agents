@@ -1,0 +1,19 @@
+{
+  "name": "Prometheus",
+  "type": "prometheus",
+  "connection": {
+    "url": "${PROMETHEUS_URL}",
+    "auth_type": "bearer_token",
+    "token": "${PROMETHEUS_TOKEN}"
+  },
+  "configuration": {
+    "timeout": "30s",
+    "metrics": [
+      "container_cpu_usage_seconds_total",
+      "container_memory_working_set_bytes",
+      "kube_pod_container_resource_requests",
+      "kube_pod_container_resource_limits",
+      "kube_node_status_capacity"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Kubernetes API",
+  "type": "kubernetes_api",
+  "connection": {
+    "cluster_endpoint": "${K8S_CLUSTER_ENDPOINT}",
+    "auth_type": "service_account",
+    "token": "${K8S_SERVICE_ACCOUNT_TOKEN}",
+    "ca_cert": "${K8S_CA_CERT}"
+  }
+}

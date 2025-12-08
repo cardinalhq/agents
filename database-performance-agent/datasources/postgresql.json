@@ -1,0 +1,17 @@
+{
+  "name": "PostgreSQL Database",
+  "type": "postgresql",
+  "connection": {
+    "host": "${POSTGRES_HOST}",
+    "port": "${POSTGRES_PORT}",
+    "database": "${POSTGRES_DATABASE}",
+    "username": "${POSTGRES_USERNAME}",
+    "password": "${POSTGRES_PASSWORD}",
+    "ssl_mode": "prefer"
+  },
+  "configuration": {
+    "query_timeout": "30s",
+    "performance_schema_enabled": true,
+    "slow_query_log_enabled": true
+  }
+}

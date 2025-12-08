@@ -1,0 +1,14 @@
+{
+  "type": "git-repository",
+  "config": {
+    "repositories": [
+      {
+        "url": "https://github.com/company/infrastructure-configs",
+        "branch": "main",
+        "paths": ["terraform/", "cloudformation/"]
+      }
+    ],
+    "template_formats": ["terraform", "cloudformation", "arm"]
+  },
+  "shared_secrets": true
+}

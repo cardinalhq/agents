@@ -1,0 +1,60 @@
+{
+  "name": "k8s-cluster-optimization",
+  "description": "Kubernetes cluster resource optimization and efficiency analysis workflow",
+  "schedule": {
+    "cron": "0 2 * * *",
+    "timezone": "UTC"
+  },
+  "steps": [
+    {
+      "name": "fetch_cluster_metrics",
+      "type": "data_query",
+      "datasource": "prometheus",
+      "query": "Get cluster CPU, memory, and resource utilization metrics"
+    },
+    {
+      "name": "analyze_pod_resource_usage",
+      "type": "data_query",
+      "datasource": "prometheus",
+      "query": "Get pod resource requests vs actual usage across namespaces"
+    },
+    {
+      "name": "fetch_node_capacity",
+      "type": "data_query",
+      "datasource": "kubernetes_api",
+      "query": "Get node capacity and allocatable resources"
+    },
+    {
+      "name": "identify_underutilized_resources",
+      "type": "analysis",
+      "input": ["fetch_cluster_metrics", "analyze_pod_resource_usage", "fetch_node_capacity"],
+      "criteria": {
+        "cpu_utilization_threshold": 25,
+        "memory_utilization_threshold": 30,
+        "node_utilization_threshold": 40,
+        "analysis_window": "7d"
+      }
+    },
+    {
+      "name": "calculate_optimization_opportunities",
+      "type": "analysis",
+      "input": ["identify_underutilized_resources"],
+      "criteria": {
+        "minimum_savings_threshold": 50,
+        "resource_buffer": 20
+      }
+    },
+    {
+      "name": "generate_optimization_report",
+      "type": "report_generation",
+      "template": "cluster_optimization_summary",
+      "input": ["calculate_optimization_opportunities"]
+    },
+    {
+      "name": "send_slack_notification",
+      "type": "notification",
+      "datasource": "slack",
+      "input": ["generate_optimization_report"]
+    }
+  ]
+}
