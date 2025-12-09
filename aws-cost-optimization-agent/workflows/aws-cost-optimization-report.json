@@ -1,50 +1,27 @@
 {
-  "name": "aws-cost-optimization-report",
-  "description": "Daily AWS cost optimization and underutilization analysis workflow",
-  "schedule": {
-    "cron": "0 0 * * *",
-    "timezone": "UTC"
-  },
+  "objective": "Analyze AWS CloudWatch metrics to identify underutilized resources and generate cost optimization recommendations",
   "steps": [
-    {
-      "name": "fetch_cost_data",
-      "type": "data_query",
-      "datasource": "aws_cost_explorer",
-      "query": "Get daily costs by service for the last 30 days"
-    },
-    {
-      "name": "analyze_ec2_utilization",
-      "type": "data_query",
-      "datasource": "aws_cloudwatch",
-      "query": "Get EC2 CPU and memory utilization metrics"
-    },
-    {
-      "name": "analyze_rds_utilization",
-      "type": "data_query",
-      "datasource": "aws_cloudwatch",
-      "query": "Get RDS CPU, connections, and IOPS utilization"
-    },
-    {
-      "name": "identify_underutilized_resources",
-      "type": "analysis",
-      "input": ["fetch_cost_data", "analyze_ec2_utilization", "analyze_rds_utilization"],
-      "criteria": {
-        "ec2_cpu_threshold": 20,
-        "rds_cpu_threshold": 30,
-        "minimum_cost_threshold": 10
-      }
-    },
-    {
-      "name": "generate_report",
-      "type": "report_generation",
-      "template": "cost_optimization_summary",
-      "input": ["identify_underutilized_resources"]
-    },
-    {
-      "name": "send_notification",
-      "type": "notification",
-      "datasource": "slack",
-      "input": ["generate_report"]
-    }
-  ]
+    "- Query CloudWatch metrics to collect EC2 CPU and memory utilization data",
+    "- Analyze RDS performance metrics including CPU, connections, and IOPS",
+    "- Identify resources with utilization below defined thresholds",
+    "- Calculate potential cost savings from rightsizing or terminating underutilized resources",
+    "- Generate optimization recommendations for each underutilized resource",
+    "- Compile findings into actionable AWS cost optimization report",
+    "- Send summary notification via Slack for immediate review"
+  ],
+  "guardrails": [
+    "- Define utilization thresholds: EC2 CPU < 20%, RDS CPU < 30%",
+    "- Include specific details for each resource: Instance Type, Utilization %, Daily Cost, Recommendation, Potential Savings",
+    "- Generate actionable cost optimization recommendations",
+    "- Focus on resources with minimum cost threshold above $10/day"
+  ],
+  "reports": [
+    "aws-cost-optimization-analysis"
+  ],
+  "knowledge": [],
+  "schedule": "0 0 * * *",
+  "cloudProvider": "aws",
+  "deploymentProfile": "production",
+  "desiredState": "active",
+  "actualState": "inactive"
 }

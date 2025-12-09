@@ -1,0 +1,27 @@
+{
+  "objective": "Monitor cluster performance using Prometheus metrics to identify optimization opportunities",
+  "steps": [
+    "- Query Prometheus metrics for cluster resource utilization data",
+    "- Analyze pod CPU and memory usage patterns across the cluster",
+    "- Identify underutilized or over-allocated resources in the cluster",
+    "- Examine cluster capacity and scaling opportunities",
+    "- Generate resource optimization recommendations for better efficiency",
+    "- Compile comprehensive cluster optimization report",
+    "- Send optimization alerts via Slack for critical resource issues"
+  ],
+  "guardrails": [
+    "- Define resource utilization thresholds for optimization recommendations",
+    "- Include specific details for each recommendation: Resource, Current Usage, Target Usage, Optimization Type, Savings",
+    "- Generate actionable cluster optimization recommendations",
+    "- Focus on optimizations with significant resource or cost savings potential"
+  ],
+  "reports": [
+    "cluster-optimization-analysis"
+  ],
+  "knowledge": [],
+  "schedule": "0 4 * * *",
+  "cloudProvider": "agnostic",
+  "deploymentProfile": "production",
+  "desiredState": "active",
+  "actualState": "inactive"
+}

@@ -1,0 +1,6 @@
+{
+  "type": "github",
+  "config": {
+    "mcpUrl": "https://api.githubcopilot.com/mcp"
+  }
+}

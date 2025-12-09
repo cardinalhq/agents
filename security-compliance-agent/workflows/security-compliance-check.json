@@ -1,0 +1,27 @@
+{
+  "objective": "Monitor security compliance status and generate compliance reports via Slack notifications",
+  "steps": [
+    "- Review security configuration and compliance requirements",
+    "- Analyze security policies and their implementation status",
+    "- Identify compliance gaps and security vulnerabilities",
+    "- Generate security recommendations for compliance improvement",
+    "- Compile comprehensive security compliance report",
+    "- Send compliance status updates via Slack notifications",
+    "- Alert on critical security issues requiring immediate attention"
+  ],
+  "guardrails": [
+    "- Define security compliance standards and thresholds",
+    "- Include specific details for each finding: Policy, Status, Risk Level, Recommendation",
+    "- Generate actionable security improvement recommendations",
+    "- Focus on high-risk security issues and compliance violations"
+  ],
+  "reports": [
+    "security-compliance-audit"
+  ],
+  "knowledge": [],
+  "schedule": "0 2 * * *",
+  "cloudProvider": "agnostic",
+  "deploymentProfile": "production",
+  "desiredState": "active",
+  "actualState": "inactive"
+}
