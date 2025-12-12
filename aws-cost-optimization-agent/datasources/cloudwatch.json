@@ -1,7 +1,0 @@
-{
-  "type": "cloudwatch",
-  "config": {
-    "region": "us-east-1"
-  },
-  "shared_secrets": true
-}
