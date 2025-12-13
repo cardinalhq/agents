@@ -2,6 +2,7 @@
   "objective": "Monitor CloudTrail data to detect AWS resource modifications made by human users outside of Terraform within a time period and send Slack notifications to responsible users",
   "steps": [
     "Use the MCP `get_query_context` tool to find CloudTrail tables in the configured datasource. If no CloudTrail tables are found, send a Slack notification reporting the configuration issue and exit the workflow - do NOT run discovery queries against information_schema",
+    "VALIDATE DATA: First run Report: `cloudtrail-latest-events` to confirm data exists in the time period. If 0 total events, there may be a query issue - check table structure and column names before concluding",
     "Query CloudTrail data using Report: `aws-console-drift-detection` as the primary template - this report implements the correct approach for detecting human-initiated changes",
     "Refer to Knowledge: `cloudtrail-terraform-drift-detection-approach` for the correct filtering patterns (UserAgent filtering, blacklist approach for read-only operations)",
     "Refer to Knowledge: `cloudtrail-human-user-identification` for extracting username from principalId field using SPLIT_PART function (required for SSO users where userName is NULL)",
@@ -13,6 +14,7 @@
     "Extract AWS username and resource details from filtered CloudTrail events",
     "Optionally use Report: `cloudtrail-write-events` to analyze event patterns if debugging is needed",
     "Check if any human-initiated manual changes were found",
+    "VALIDATE RESULTS: If the filtered query returns 0 results but cloudtrail-latest-events showed data exists, run Report: `cloudtrail-write-events` to see what events exist and verify filters are working correctly",
     "If changes found: Retrieve Slack users list from slack datasource",
     "If changes found: Map AWS username to Slack user identifier",
     "If changes found: Send direct message to each user with resource details and reminder about using Terraform",
@@ -20,6 +22,7 @@
   ],
   "guardrails": [
     "IMPORTANT: Only query tables configured in datasource categories. If CloudTrail tables are not found, notify via Slack and exit - never run broad discovery queries",
+    "IMPORTANT: Do NOT blindly accept 0 results. Always validate that data exists first using cloudtrail-latest-events, then if filtered query returns 0, verify the filters are correct using cloudtrail-write-events",
     "Only query data from specified time period (not complete history)",
     "Only detect resource creation, deletion, and modification events",
     "IMPORTANT: Use blacklist pattern for read-only operations (Describe%, Get%, List%, Lookup%) - DO NOT use whitelist for event types as shown in Knowledge: `cloudtrail-terraform-drift-detection-approach`",
