@@ -16,16 +16,7 @@
     "- Generate concise, to-the-point, actionable report",
     "- Focus on services that show clear underutilization with quantifiable savings potential"
   ],
-  "reports": [
-    "gcp-billing-cost-analysis"
-  ],
+  "reports": ["gcp-billing-cost-analysis"],
   "knowledge": [],
-  "schedule": "0 0 * * *",
-  "cloudProvider": "gcp",
-  "deploymentProfile": "production",
-  "desiredState": "active",
-  "actualState": "active",
-  "projectId": "kk-agent-workflow-testing",
-  "cloudRunJobId": "projects/kk-agent-workflow-testing/locations/us-central1/jobs/cardinalhq-gcp-billing-agent-gcp-underutilization-report",
-  "cloudSchedulerId": "projects/kk-agent-workflow-testing/locations/us-central1/jobs/cardinalhq-gcp-billing-agent-gcp-underutilization-report-scheduler"
+  "schedule": "0 0 * * *"
 }

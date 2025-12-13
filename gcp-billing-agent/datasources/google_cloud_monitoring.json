@@ -1,8 +1,4 @@
 {
   "type": "gcp-monitoring",
-  "config": {
-    "projectIds": [
-      "ap-lakerunner"
-    ]
-  }
+  "config": {}
 }
