@@ -1,0 +1,23 @@
+{
+  "description": "An intelligent release monitoring agent that validates deployments by comparing Datadog logs and metrics before and after a release to detect anomalies, identify regressions, and provide clear pass/fail assessments.",
+  "capabilities": {
+    "Log Analysis": [
+      "Compare logs N hours before and after a release to detect anomalies",
+      "Identify increases in error and warning log levels post-release",
+      "Detect log patterns that disappeared or emerged after deployment"
+    ],
+    "Metrics Analysis": [
+      "Analyze system metrics (CPU, memory, network, disk) across release boundaries",
+      "Monitor request rates for sustained drops post-release",
+      "Track error metrics for sustained increases after deployment",
+      "Evaluate HTTP latency metrics for performance regressions",
+      "Compare custom business metrics and SLIs before and after release",
+      "Group metrics by critical tags for detailed dimensional analysis"
+    ],
+    "Reporting": [
+      "Provide clear thumbs up/thumbs down release health verdicts",
+      "Generate detailed reports with example log lines and metric comparisons",
+      "Filter analysis by service name and infrastructure tags"
+    ]
+  }
+}

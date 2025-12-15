@@ -5,16 +5,17 @@
   "query": "metric.type=\"compute.googleapis.com/instance/cpu/utilization\"",
   "status": "private",
   "meta": {
-    "description": "Filter metrics by type matching {metric_type}",
-    "placeholders": [
+    "query_description": "Filter metrics by type matching {metric_type}",
+    "question_template": "What are my underutilized compute instances based on {metric_type}?",
+    "query_info": {},
+    "query_placeholders": [
       {
         "name": "metric_type",
         "original_value": "compute.googleapis.com/instance/cpu/utilization",
         "type": "string"
       }
     ],
-    "query_info": {},
-    "sql_template": "metric.type=?"
+    "query_template": "metric.type=\"{{metric_type}}\""
   },
   "datasource_name": "google_cloud_monitoring"
 }

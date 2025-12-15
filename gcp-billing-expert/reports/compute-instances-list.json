@@ -2,11 +2,13 @@
   "name": "compute-instances-list",
   "text": "What compute instances am I running in the last 5 days, and do they have any labels that might indicate what they are for?",
   "query_type": "bigquery_sql",
-  "query": "SELECT\n  COALESCE(JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.resource_name'),\n           JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.name'),\n           JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.id'),\n           'unknown') AS instance_resource,\n  project.id AS project_id,\n  service.description AS service_description,\n  LOWER(sku.description) AS sku_description,\n  TO_JSON_STRING(labels) AS labels_json,\n  MIN(usage_start_time) AS first_seen,\n  MAX(usage_end_time) AS last_seen,\n  ROUND(SUM(cost), 2) AS total_cost_5d\nFROM `{billing_resource_table}`\nWHERE cost \u003e 0\n  AND usage_start_time \u003e= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 5 DAY)\n  AND (LOWER(sku.description) LIKE '%instance%' OR LOWER(sku.description) LIKE '%e2%')\nGROUP BY instance_resource, project_id, service_description, sku_description, labels_json\nORDER BY total_cost_5d DESC\nLIMIT 100",
+  "query": "SELECT\n  COALESCE(JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.resource_name'),\n           JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.name'),\n           JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.id'),\n           'unknown') AS instance_resource,\n  project.id AS project_id,\n  service.description AS service_description,\n  LOWER(sku.description) AS sku_description,\n  TO_JSON_STRING(labels) AS labels_json,\n  MIN(usage_start_time) AS first_seen,\n  MAX(usage_end_time) AS last_seen,\n  ROUND(SUM(cost), 2) AS total_cost_5d\nFROM `chip_billing.gcp_billing_export_resource_v1_01D01E_9B88C7_8078BC`\nWHERE cost > 0\n  AND usage_start_time >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 5 DAY)\n  AND (LOWER(sku.description) LIKE '%instance%' OR LOWER(sku.description) LIKE '%e2%')\nGROUP BY instance_resource, project_id, service_description, sku_description, labels_json\nORDER BY total_cost_5d DESC\nLIMIT 100",
   "status": "private",
   "meta": {
-    "description": "Show GCP billing resources with costs greater than {min_cost} in the last {lookback_days} days, filtered by SKU descriptions matching {sku_pattern_1} or {sku_pattern_2}, limited to top {max_results} results by total cost",
-    "placeholders": [
+    "query_description": "Show GCP billing resources with costs greater than {min_cost} in the last {lookback_days} days, filtered by SKU descriptions matching {sku_pattern_1} or {sku_pattern_2}, limited to top {max_results} results by total cost",
+    "question_template": "What compute instances am I running in the last {lookback_days} days with their labels?",
+    "sql_flow_diagram": "flowchart TD\n    Q[\"Question: What compute instances am I running in the last 5 days, and do they have any labels that might indicate what they are for?\"]\n    T1[(\"chip_billing.gcp_billing_export_resource_v1_01D01E_9B88C7_8078BC\")]\n    F1{\"Filter: cost > 0\"}\n    F2{\"Filter: usage_start_time >= 5 days ago\"}\n    F3{\"Filter: sku.description contains 'instance' or 'e2'\"}\n    E1{\"Extract: instance resource name/id\"}\n    E2{\"Extract: project_id, service_description, sku_description\"}\n    E3{\"Extract: labels as JSON\"}\n    AGG{\"GROUP BY instance details<br/>Aggregate: MIN/MAX usage times, SUM cost\"}\n    S{\"ORDER BY total_cost DESC<br/>LIMIT 200\"}\n    R[\"Result: Running compute instances with labels,<br/>time ranges, and costs\"]\n\n    Q --> T1\n    T1 --> F1\n    F1 --> F2\n    F2 --> F3\n    F3 --> E1\n    F3 --> E2\n    F3 --> E3\n    E1 --> AGG\n    E2 --> AGG\n    E3 --> AGG\n    AGG --> S\n    S --> R",
+    "query_placeholders": [
       {
         "name": "billing_resource_table",
         "original_value": "chip_billing.gcp_billing_export_resource_v1_01D01E_9B88C7_8078BC",
@@ -38,40 +40,7 @@
         "type": "int"
       }
     ],
-    "sql_flow_diagram": "flowchart TD\n    Q[\"Question: What compute instances am I running in the last 5 days, and do they have any labels that might indicate what they are for?\"]\n    T1[(\"{billing_resource_table}\")]\n    F1{\"Filter: cost \u003e 0\"}\n    F2{\"Filter: usage_start_time \u003e= 5 days ago\"}\n    F3{\"Filter: sku.description contains 'instance' or 'e2'\"}\n    E1{\"Extract: instance resource name/id\"}\n    E2{\"Extract: project_id, service_description, sku_description\"}\n    E3{\"Extract: labels as JSON\"}\n    AGG{\"GROUP BY instance details\u003cbr/\u003eAggregate: MIN/MAX usage times, SUM cost\"}\n    S{\"ORDER BY total_cost DESC\u003cbr/\u003eLIMIT 200\"}\n    R[\"Result: Running compute instances with labels,\u003cbr/\u003etime ranges, and costs\"]\n\n    Q --\u003e T1\n    T1 --\u003e F1\n    F1 --\u003e F2\n    F2 --\u003e F3\n    F3 --\u003e E1\n    F3 --\u003e E2\n    F3 --\u003e E3\n    E1 --\u003e AGG\n    E2 --\u003e AGG\n    E3 --\u003e AGG\n    AGG --\u003e S\n    S --\u003e R",
-    "sql_placeholders": [
-      {
-        "name": "billing_resource_table",
-        "original_value": "chip_billing.gcp_billing_export_resource_v1_01D01E_9B88C7_8078BC",
-        "type": "string"
-      },
-      {
-        "name": "min_cost",
-        "original_value": "0",
-        "type": "double"
-      },
-      {
-        "name": "lookback_days",
-        "original_value": "5",
-        "type": "int"
-      },
-      {
-        "name": "sku_pattern_1",
-        "original_value": "%instance%",
-        "type": "string"
-      },
-      {
-        "name": "sku_pattern_2",
-        "original_value": "%e2%",
-        "type": "string"
-      },
-      {
-        "name": "max_results",
-        "original_value": "100",
-        "type": "int"
-      }
-    ],
-    "sql_template": "SELECT\n  COALESCE(JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.resource_name'),\n           JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.name'),\n           JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.id'),\n           'unknown') AS instance_resource,\n  project.id AS project_id,\n  service.description AS service_description,\n  LOWER(sku.description) AS sku_description,\n  TO_JSON_STRING(labels) AS labels_json,\n  MIN(usage_start_time) AS first_seen,\n  MAX(usage_end_time) AS last_seen,\n  ROUND(SUM(cost), 2) AS total_cost_5d\nFROM `{billing_resource_table}`\nWHERE cost \u003e ?\n  AND usage_start_time \u003e= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL ? DAY)\n  AND (LOWER(sku.description) LIKE ? OR LOWER(sku.description) LIKE ?)\nGROUP BY instance_resource, project_id, service_description, sku_description, labels_json\nORDER BY total_cost_5d DESC\nLIMIT ?"
+    "query_template": "SELECT\n  COALESCE(JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.resource_name'),\n           JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.name'),\n           JSON_EXTRACT_SCALAR(TO_JSON_STRING(resource), '$.id'),\n           'unknown') AS instance_resource,\n  project.id AS project_id,\n  service.description AS service_description,\n  LOWER(sku.description) AS sku_description,\n  TO_JSON_STRING(labels) AS labels_json,\n  MIN(usage_start_time) AS first_seen,\n  MAX(usage_end_time) AS last_seen,\n  ROUND(SUM(cost), 2) AS total_cost_5d\nFROM `{{billing_resource_table}}`\nWHERE cost > {{min_cost}}\n  AND usage_start_time >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{lookback_days}} DAY)\n  AND (LOWER(sku.description) LIKE '{{sku_pattern_1}}' OR LOWER(sku.description) LIKE '{{sku_pattern_2}}')\nGROUP BY instance_resource, project_id, service_description, sku_description, labels_json\nORDER BY total_cost_5d DESC\nLIMIT {{max_results}}"
   },
   "datasource_name": "google_bigquery"
 }

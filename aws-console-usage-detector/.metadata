@@ -1,1 +1,13 @@
-watches for resources that were created from the console/UI instead of terraform. Sends the user a slack message reminding them to use terraform.
+{
+  "description": "Monitors AWS for resources created via the console/UI instead of Terraform and sends Slack reminders to use infrastructure as code.",
+  "capabilities": {
+    "Detection": [
+      "Watch for AWS resources created from the console/UI",
+      "Identify resources not provisioned through Terraform"
+    ],
+    "Notifications": [
+      "Send Slack messages reminding users to use Terraform",
+      "Alert on infrastructure as code compliance violations"
+    ]
+  }
+}

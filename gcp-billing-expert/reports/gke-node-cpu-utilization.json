@@ -1,34 +1,26 @@
 {
   "name": "gke-node-cpu-utilization",
-  "text": "What is the GKE node CPU allocatable utilization",
-  "query_type": "gcp_monitoring",
+  "text": "GKE node CPU allocatable utilization over last 7 days",
+  "query_type": "gcp_metrics",
   "query": "metric.type=\"kubernetes.io/node/cpu/allocatable_utilization\"",
   "status": "private",
   "meta": {
+    "provider": "gcp",
+    "query_description": "Fetches CPU allocatable utilization metrics for Kubernetes nodes",
     "query_info": {
-      "api_path": "/v3/projects/{gcp_project_id}/timeSeries",
+      "api_path": "/v3/projects/ap-lakerunner/timeSeries",
       "base_url": "https://monitoring.googleapis.com",
-      "filter": "metric.type=\"kubernetes.io/node/cpu/allocatable_utilization\"",
-      "group_by": null,
-      "list_params": {
-        "filter": "metric.type=\"kubernetes.io/node/cpu/allocatable_utilization\"",
-        "interval": {
-          "endTime": "2025-11-21T13:58:28Z",
-          "startTime": "2025-11-14T13:58:28Z"
-        }
-      },
-      "project": "projects/{gcp_project_id}",
-      "query_type": "filter",
+      "datasource_type": "gcp-monitoring",
+      "end": "",
+      "project_id": "projects/ap-lakerunner",
+      "query": "metric.type=\"kubernetes.io/node/cpu/allocatable_utilization\"",
+      "query_type": "aggregate",
+      "start": "",
       "step_seconds": 1800
     },
-    "query_description": "Show GKE node CPU allocatable utilization metrics for project {gcp_project_id}",
-    "query_placeholders": [
-      {
-        "name": "gcp_project_id",
-        "type": "string",
-        "original_value": "ap-lakerunner"
-      }
-    ]
+    "query_placeholders": [],
+    "query_template": "metric.type=\"kubernetes.io/node/cpu/allocatable_utilization\"",
+    "query_type": "metrics"
   },
   "datasource_name": "google_cloud_monitoring"
 }
