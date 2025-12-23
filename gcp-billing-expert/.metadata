@@ -18,5 +18,23 @@
       "Provide rightsizing recommendations for overprovisioned resources",
       "Send automated cost alerts and summaries via Slack"
     ]
-  }
+  },
+  "datasources": [
+    {
+      "name": "bigquery-query-insights",
+      "type": "bigquery-query-insights"
+    },
+    {
+      "name": "bigquery",
+      "type": "bigquery"
+    },
+    {
+      "name": "gcp-monitoring",
+      "type": "gcp-monitoring"
+    },
+    {
+      "name": "slack",
+      "type": "slack"
+    }
+  ]
 }

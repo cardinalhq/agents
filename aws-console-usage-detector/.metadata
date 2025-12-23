@@ -9,5 +9,15 @@
       "Send Slack messages reminding users to use Terraform",
       "Alert on infrastructure as code compliance violations"
     ]
-  }
+  },
+  "datasources": [
+    {
+      "name": "slack",
+      "type": "slack"
+    },
+    {
+      "name": "snowflake",
+      "type": "snowflake"
+    }
+  ]
 }

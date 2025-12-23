@@ -19,5 +19,11 @@
       "Generate detailed reports with example log lines and metric comparisons",
       "Filter analysis by service name and infrastructure tags"
     ]
-  }
+  },
+  "datasources": [
+    {
+      "name": "datadog",
+      "type": "datadog"
+    }
+  ]
 }
